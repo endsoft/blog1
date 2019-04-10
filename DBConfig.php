@@ -11,7 +11,7 @@ class DBConfig {
 			$this->host='localhost';
 			$this->username='root';
 			$this->password='';
-			$this->db='blog';
+			$this->db='fblog';
 
 			$this->conn= new mysqli($this->host,$this->username,$this->password,$this->db);
 			if ($this->conn->connect_error) {

@@ -8,18 +8,14 @@ $result=$posts->getPosts($query);
 <br>
 <br>
 <?php
-foreach ($result as $key => $res) {
-	$sql="SELECT firstLastName FROM author WHERE id=".$res['author_id'];
-	$firstLastName=$posts->getPosts($sql);
-	echo "<h1>".$res['title']." </h1>";
-	echo "<p>".$res['post']." </p>";
-	foreach ($firstLastName as $key => $firstLast) {
-		echo "<p>Posted by: ".$firstLast['firstLastName'];
+if (is_array($result) || is_object($result)) {
+	foreach ($result as $key => $res) {
+		$posts->setDetails($res['title'],$res['post'],$res['author_id'],$res['date_posted']);
+		$post=$posts->getDetails();
+		echo "<h1>".$post['title']." </h1>";
+		echo "<p>".$post['post']." </p>";
+		echo "<p>Posted by: ".$post['author'].$post['date_posted'];
+
 	}
-	$splitDate=explode("-",$res['date_posted']);
-	$month=$posts->getDate($splitDate[1]);
-	echo " on ".$month." ".$splitDate[2].", ".$splitDate[0]." </p>";
-
-
 }
 ?>

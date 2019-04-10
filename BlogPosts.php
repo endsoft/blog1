@@ -1,13 +1,35 @@
 <?php
 include_once('DBConfig.php');
 class BlogPosts extends DBConfig {
+	private $title;
+	private $post;
+	private $author;
+	private $date_posted;
+
+
 	public function __construct() {
 		parent::__construct();
 	}
+
+	public function setDetails($title=null,$post=null,$author=null,$date_posted=null) {
+		$this->title=$title;
+		$this->post=$post;
+		$sql="SELECT firstLastName FROM author WHERE id=".$author;
+		$firstLastName=$this->getPosts($sql);
+		foreach ($firstLastName as $key => $firstLast) {
+			$this->author=$firstLast['firstLastName'];
+		}
+		$splitDate=explode("-",$date_posted);
+		$month=$this->getDate($splitDate[1]);
+		$this->date_posted=" on ".$month." ".$splitDate[2].", ".$splitDate[0];
+	}
+
+	public function getDetails() {
+		return ['title'=>$this->title,'post'=>$this->post,'author'=>$this->author,'date_posted'=>$this->date_posted];
+	}
 	public function getPosts($query) {
 		$result=$this->conn->query($query);
-
-		if ($result == false ) {
+		if ($result == false || ((mysqli_num_rows($result)) == 0)) {
 			return false;
 		}
 		$rows= array();
@@ -17,6 +39,8 @@ class BlogPosts extends DBConfig {
 		}
 		return $rows;
 	}
+
+
 	public function getDate($month) {
 		switch ($month) {
 		case "01":

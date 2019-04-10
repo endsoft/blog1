@@ -48,7 +48,7 @@ $result=$posts->getPosts($query);
             <a class="nav-link" href="#">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Sample Post</a>
+            <a class="nav-link" href="post.php?id=1">Sample Post</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
@@ -77,31 +77,27 @@ $result=$posts->getPosts($query);
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
-        <?php foreach ($result as $key => $res) {
-            $sql="SELECT firstLastName FROM author WHERE id=".$res['author_id'];
-            $firstLastName=$posts->getPosts($sql); ?>
+        <?php 
+        if (is_array($result) || is_object($result)) {
+            foreach ($result as $key => $res) {
+              $posts->setDetails($res['title'],$res['post'],$res['author_id'],$res['date_posted']);
+              $post=$posts->getDetails();?>
         <div class="post-preview">
-          <a href="#">
+          <a href="post.php?id=<?php echo $res['id'];?>">
             <h2 class="post-title">
-              <?php echo $res['title']; ?>
+              <?php echo $post['title']; ?>
             </h2>
             <h3 class="post-subtitle">
-              <?php echo $res['post']; ?>
+              <?php echo $post['post']; ?>
             </h3>
           </a>
           <p class="post-meta">Posted by
-            <a href="#"><?php 
-            foreach ($firstLastName as $key => $firstLast) {
-              echo $firstLast['firstLastName'];
-              }
-            ?></a>
-            on <?php 
-                 $splitDate=explode("-",$res['date_posted']);
-                 $month=$posts->getDate($splitDate[1]);
-                 echo $month." ".$splitDate[2].", ".$splitDate[0]
+            <a href="#"><?php echo $post['author']; ?></a><?php 
+            echo $post['date_posted'];
             ?></p>
         </div>
         <?php 
+      }
         }
         ?>
         <hr>
