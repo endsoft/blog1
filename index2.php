@@ -1,4 +1,5 @@
 <?php
+include_once('header.php');
 include_once('BlogPosts.php');
 $posts=new BlogPosts();
 $query="SELECT * FROM posts ORDER BY id DESC";
@@ -8,6 +9,9 @@ $result=$posts->getPosts($query);
 <br>
 <br>
 <?php
+if(isset($_SESSION['author'])) {
+	echo "<h3> Welcome ".$_SESSION['author']."</h3>";
+}
 if (is_array($result) || is_object($result)) {
 	foreach ($result as $key => $res) {
 		$posts->setDetails($res['title'],$res['post'],$res['author_id'],$res['date_posted']);
